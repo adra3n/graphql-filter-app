@@ -32,8 +32,6 @@ const query = gql`
     }
   }
 `
-//bg colors array
-const backgroundColors = ['orange', 'lightpink', 'lightgreen', 'lightblue']
 
 const CountryList: React.FC = () => {
   const { data } = useQuery(query)
@@ -42,7 +40,7 @@ const CountryList: React.FC = () => {
   const [searchFilter, setSearchFilter] = useState('')
   const [filteredList, setFilteredList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-
+  //added | null here for select deselect logic
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null
   )
@@ -74,7 +72,7 @@ const CountryList: React.FC = () => {
           }
         )
       }
-
+      //filter logic
       if (data) {
         const filteredCountries = data.countries.filter(
           (country: { code: string; name: string; capital: string }) =>
@@ -95,7 +93,7 @@ const CountryList: React.FC = () => {
 
       setFilteredList(filteredCountries)
     }
-
+    //when i search for low numbers of results, page i selected was not updating properly. so added this.
     setCurrentPage(1)
   }, [data, filter, searchFilter, groupFilter])
 
@@ -116,7 +114,7 @@ const CountryList: React.FC = () => {
       }
     })
   }
-
+  //select deselect
   const handleItemClick = (index: number) => {
     setSelectedItemIndex((prevIndex) => (prevIndex !== index ? index : null))
   }
@@ -143,6 +141,7 @@ const CountryList: React.FC = () => {
           </TableHead>
           <TableBody>
             {filteredList
+              //pagination
               .slice(
                 (currentPage - 1) * itemsPerPage,
                 currentPage * itemsPerPage
