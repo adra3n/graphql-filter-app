@@ -48,13 +48,16 @@ const CountryList: React.FC = () => {
   const itemsPerPage = 11
   useEffect(() => {
     if (data) {
+      //filtering logic for search
       let filteredCountries = data.countries.filter(
         (country: { name: string; capital: string }) => {
+          //if its using search:
           if (searchFilter.length > 0) {
             return country.name
               .toUpperCase()
               .includes(searchFilter.toUpperCase())
           } else {
+            //else filter with classic search
             return country.name.toUpperCase().includes(filter.toUpperCase())
           }
         }
@@ -62,6 +65,8 @@ const CountryList: React.FC = () => {
 
       if (groupFilter) {
         // grouping logic for 'groupFilter'
+
+        //filtering countries.currency with groupFilter
         filteredCountries = filteredCountries.filter(
           (country: { currency: string }) => {
             if (country.currency) {
@@ -69,6 +74,8 @@ const CountryList: React.FC = () => {
                 .toUpperCase()
                 .includes(groupFilter.toUpperCase())
             }
+            //added for eslint warning
+            return false
           }
         )
       }
@@ -81,6 +88,7 @@ const CountryList: React.FC = () => {
         //useEffect was buggy for selectedIndex so i used here as let
         let selectedIndex = null
 
+        //select 10th country if you can or select last
         if (filteredCountries.length > 0) {
           if (filteredCountries.length >= 10) {
             selectedIndex = 9
@@ -99,15 +107,17 @@ const CountryList: React.FC = () => {
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter)
-
+    //splitting from " " so i can handle group: and search:
     const filterArr = newFilter.split(' ')
 
     filterArr.forEach((e) => {
       let search = ''
       let group = ''
+      //checking for search: and replacing it and trimming it to get searchFilter
       if (e.includes('search:')) {
         search = e.replace('search:', '').trim()
         setSearchFilter(search)
+        //same for group: here. getting groupFilter
       } else if (e.includes('group:')) {
         group = e.replace('group:', '').trim()
         setGroupFilter(group)
