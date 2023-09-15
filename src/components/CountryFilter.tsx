@@ -1,16 +1,15 @@
-import React, { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 import { TextField } from '@mui/material'
 
+//interface
 interface CountryFilterProps {
   onFilterChange: (filter: string) => void
 }
 
-//i added ChangeEvent<HTMLInputElement for onChange for ts best practice
-
 const CountryFilter: FC<CountryFilterProps> = ({ onFilterChange }) => {
   const [filter, setFilter] = useState('')
 
-  //i added ChangeEvent<HTMLInputElement for onChange for ts best practice
+  //i added ChangeEvent<HTMLInputElement for onFilterChange for ts best practice
 
   const handleFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newFilter = event.target.value
