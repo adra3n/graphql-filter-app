@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   TableRow,
   TableCell,
@@ -72,14 +72,14 @@ const Country: React.FC<CountryProps> = ({
       {/* i ve added a dialog box for country info */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          {emoji} {name}
+          {emoji}-{name}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>Native Name: {native}</DialogContentText>
 
           <DialogContentText>Capital: {capital}</DialogContentText>
           <DialogContentText>Currency: {currency}</DialogContentText>
-
+          <hr></hr>
           <DialogContentText>Languages:</DialogContentText>
           {languages.map((language, index) => (
             <DialogContentText key={index}>
