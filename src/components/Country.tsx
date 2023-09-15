@@ -6,7 +6,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  Button,
 } from '@mui/material'
 
 //ts interface for props
