@@ -34,6 +34,7 @@ const query = gql`
 `
 
 const CountryList: React.FC = () => {
+  //querry returns data
   const { data } = useQuery(query)
   const [filter, setFilter] = useState('')
   const [groupFilter, setGroupFilter] = useState('')
@@ -192,7 +193,7 @@ const CountryList: React.FC = () => {
         />
       </TableContainer>
       <Typography style={{ margin: '20px 0 10px 0' }}>
-        Double Click For More Info!
+        <b>Double click</b> on a country for more info!
       </Typography>
     </Container>
   )

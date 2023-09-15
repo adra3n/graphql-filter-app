@@ -59,6 +59,7 @@ const Country: React.FC<CountryProps> = ({
       <TableRow
         selected={isSelected}
         onClick={handleItemClick}
+        //double click to open info dialog box
         onDoubleClick={handleOpen}
         style={{
           backgroundColor: isSelected ? backgroundColor : 'white',
