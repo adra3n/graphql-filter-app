@@ -46,7 +46,6 @@ const CountryList: React.FC = () => {
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null
   )
-  const [availableColors, setAvailableColors] = useState([...backgroundColors])
 
   const itemsPerPage = 11
   useEffect(() => {
@@ -65,20 +64,15 @@ const CountryList: React.FC = () => {
 
       if (groupFilter) {
         // grouping logic for 'groupFilter'
-        const grouped = filteredCountries.reduce(
-          (grouped: any, country: any) => {
-            const key = country.currency
-            if (!grouped[key]) {
-              grouped[key] = []
+        filteredCountries = filteredCountries.filter(
+          (country: { currency: string }) => {
+            if (country.currency) {
+              return country.currency
+                .toUpperCase()
+                .includes(groupFilter.toUpperCase())
             }
-            grouped[key].push(country)
-            return grouped
-          },
-          {}
+          }
         )
-
-        // i converted grouped object back into an array here
-        filteredCountries = Object.values(grouped).flat()
       }
 
       if (data) {
@@ -123,26 +117,9 @@ const CountryList: React.FC = () => {
     })
   }
 
-  const handleItemClick = (
-    index: number,
-    selectedColor: string,
-    previousColor: string
-  ) => {
+  const handleItemClick = (index: number) => {
     setSelectedItemIndex((prevIndex) => (prevIndex !== index ? index : null))
-
-    // adding the previous color back to availableColors
-    if (previousColor !== '') {
-      setAvailableColors((prevColors) => [...prevColors, previousColor])
-    }
-
-    // removing the new color from availableColors
-    if (selectedColor !== '') {
-      setAvailableColors((prevColors) =>
-        prevColors.filter((color) => color !== selectedColor)
-      )
-    }
   }
-
   return (
     <Container>
       <Typography variant="h4" style={{ margin: '20px 0 10px 0' }}>
@@ -191,10 +168,8 @@ const CountryList: React.FC = () => {
                     currency={country.currency}
                     languages={country.languages}
                     isSelected={index === selectedItemIndex}
-                    onSelect={(selectedColor: string, previousColor: string) =>
-                      handleItemClick(index, selectedColor, previousColor)
-                    }
-                    availableColors={availableColors}
+                    onSelect={() => handleItemClick(index)}
+                    index={index}
                   />
                 )
               )}

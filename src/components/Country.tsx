@@ -17,10 +17,12 @@ interface CountryProps {
   emoji: string
   currency: string
   languages: { code: string; name: string }[]
-  onSelect: (selectedColor: string, previousColor: string) => void
+  onSelect: (selectedColor: string) => void
   isSelected: boolean
-  availableColors: string[]
+  index: number
 }
+
+const backgroundColors = ['orange', 'lightpink', 'lightgreen', 'lightblue']
 
 const Country: React.FC<CountryProps> = ({
   name,
@@ -31,39 +33,21 @@ const Country: React.FC<CountryProps> = ({
   languages,
   onSelect,
   isSelected,
-  availableColors,
+  index,
 }) => {
-  const [backgroundColor, setBackgroundColor] = useState<string>('')
+  //setting bg color using % on backgroundColors.lenght here. i was more comfortable with this logic than handling randomness
+  const newBackgroundColor = backgroundColors[index % backgroundColors.length]
+
+  const [backgroundColor, setBackgroundColor] =
+    useState<string>(newBackgroundColor)
   const [open, setOpen] = useState(false)
 
-  //color change logic
-  useEffect(() => {
-    if (isSelected) {
-      if (backgroundColor === '') {
-        const unusedColors = availableColors.filter(
-          (color) => color !== backgroundColor
-        )
-        const randomColorIndex = Math.floor(Math.random() * unusedColors.length)
-
-        const newBackgroundColor = unusedColors[randomColorIndex]
-        setBackgroundColor(newBackgroundColor)
-      }
-    }
-  }, [isSelected])
-
+  //changed it from random selection to % backgroundColors.length selection
   const handleItemClick = () => {
-    if (isSelected) {
-      onSelect('', backgroundColor)
-    } else {
-      const unusedColors = availableColors.filter(
-        (color) => color !== backgroundColor
-      )
-      const randomColorIndex = Math.floor(Math.random() * unusedColors.length)
-      const newBackgroundColor = unusedColors[randomColorIndex]
-      onSelect(newBackgroundColor, backgroundColor)
-      setBackgroundColor(newBackgroundColor)
-    }
+    onSelect(newBackgroundColor)
+    setBackgroundColor(newBackgroundColor)
   }
+
   //open close functions for dialog box
   const handleOpen = () => {
     setOpen(true)
@@ -88,12 +72,15 @@ const Country: React.FC<CountryProps> = ({
       </TableRow>
       {/* i ve added a dialog box for country info */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{name}</DialogTitle>
+        <DialogTitle>
+          {emoji} {name}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>Native Name: {native}</DialogContentText>
+
           <DialogContentText>Capital: {capital}</DialogContentText>
           <DialogContentText>Currency: {currency}</DialogContentText>
-          <DialogContentText>Emoji: {emoji}</DialogContentText>
+
           <DialogContentText>Languages:</DialogContentText>
           {languages.map((language, index) => (
             <DialogContentText key={index}>
